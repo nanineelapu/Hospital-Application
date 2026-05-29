@@ -1,23 +1,25 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
-
 metadata:
   name: hospital-eks
-  region: ap-south-1        # Mumbai. Change if required.
+  region: ap-southeast-2
   version: "1.30"
-
+availabilityZones:
+  - ap-southeast-2a
+  - ap-southeast-2b
 iam:
-  withOIDC: true            # needed for the EBS CSI driver IAM role
-
+  withOIDC: true
 managedNodeGroups:
   - name: ng-workers
-    instanceType: t3.medium
-    desiredCapacity: 2       # HA: 2 worker nodes
-    minSize: 2
-    maxSize: 3
+    instanceType: t3.small
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 2
     volumeSize: 20
-
+    iam:
+      withAddonPolicies:
+        ebs: true
 addons:
-  - name: aws-ebs-csi-driver   # real persistent storage (Phase 8); auto-creates IAM role
+  - name: aws-ebs-csi-driver
     wellKnownPolicies:
       ebsCSIController: true
