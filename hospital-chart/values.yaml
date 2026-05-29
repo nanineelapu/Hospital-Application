@@ -2,7 +2,7 @@
 
 app:
   image:
-    repository: YOUR_DOCKERHUB_USERNAME/hospital-app   # <<< change this
+    repository: nanineelapu/hospital-app   # <<< change this
     tag: "1.0.0"
   replicas: 2
   containerPort: 5000
