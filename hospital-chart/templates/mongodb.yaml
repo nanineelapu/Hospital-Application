@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+spec:
+  serviceName: mongodb-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: {{ .Values.mongodb.image | quote }}
+          ports:
+            - containerPort: {{ .Values.mongodb.port }}
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+  volumeClaimTemplates:
+    - metadata:
+        name: mongodb-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: {{ .Values.mongodb.storageClass | quote }}
+        resources:
+          requests:
+            storage: {{ .Values.mongodb.storageSize | quote }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-headless
+spec:
+  clusterIP: None
+  selector:
+    app: mongodb
+  ports:
+    - port: {{ .Values.mongodb.port }}
+      targetPort: {{ .Values.mongodb.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - port: {{ .Values.mongodb.port }}
+      targetPort: {{ .Values.mongodb.port }}
+  type: ClusterIP
