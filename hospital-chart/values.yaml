@@ -1,0 +1,28 @@
+# All configurable values live here. Templates contain no hardcoded values (Phase 9).
+
+app:
+  image:
+    repository: YOUR_DOCKERHUB_USERNAME/hospital-app   # <<< change this
+    tag: "1.0.0"
+  replicas: 2
+  containerPort: 5000
+  service:
+    type: LoadBalancer
+    port: 80
+
+config:
+  MONGO_URI: "mongodb://mongodb-service:27017/hospital_management"
+  PORT: "5000"
+  NODE_ENV: "production"
+
+secret:
+  SESSION_SECRET: "CHANGE-ME-session-secret"
+  JWT_SECRET: "CHANGE-ME-jwt-secret"
+  ADMIN_USERNAME: "admin"
+  ADMIN_PASSWORD: "CHANGE-ME-strong-password"
+
+mongodb:
+  image: "mongo:7-jammy"
+  storageClass: "ebs-gp3"
+  storageSize: "5Gi"
+  port: 27017
