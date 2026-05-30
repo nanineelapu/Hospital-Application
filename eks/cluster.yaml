@@ -1,4 +1,5 @@
 # EKS cluster configuration for the Hospital Management application.
+#cluster will be creaetd and deploy app through the clusetr 
 # Provision with: eksctl create cluster -f eks/cluster.yaml
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
