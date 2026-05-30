@@ -3,26 +3,25 @@
 # Provision with: eksctl create cluster -f eks/cluster.yaml
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
+
 metadata:
   name: hospital-eks
-  region: ap-southeast-2
+  region: ap-southeast-2    # Sydney.
   version: "1.30"
-availabilityZones:
-  - ap-southeast-2a
-  - ap-southeast-2b
+
 iam:
-  withOIDC: true
+  withOIDC: true            # needed for the EBS CSI driver IAM role
+
 managedNodeGroups:
   - name: ng-workers
-    instanceType: t3.small
-    desiredCapacity: 1
-    minSize: 1
-    maxSize: 2
+    instanceType: t3.medium
+    desiredCapacity: 2          # HA: 2 worker nodes
+    minSize: 2
+    maxSize: 3
     volumeSize: 20
-    iam:
-      withAddonPolicies:
-        ebs: true
+    privateNetworking: true     # nodes go into PRIVATE subnets (no public IP); reach them via the bastion in the public subnet
+
 addons:
-  - name: aws-ebs-csi-driver
+  - name: aws-ebs-csi-driver   # real persistent storage (Phase 8); auto-creates IAM role
     wellKnownPolicies:
       ebsCSIController: true
