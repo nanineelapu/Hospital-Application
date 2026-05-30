@@ -1,3 +1,5 @@
+# EKS cluster configuration for the Hospital Management application.
+# Provision with: eksctl create cluster -f eks/cluster.yaml
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
